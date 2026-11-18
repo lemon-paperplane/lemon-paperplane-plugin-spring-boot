@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.0.0.5:3306/demo_dev
+  data:
+    redis:
+      host: redis.dev.local
+      port: 6380
+  rabbitmq:
+    host: mq.dev.local

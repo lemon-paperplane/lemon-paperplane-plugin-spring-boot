@@ -1,0 +1,28 @@
+server:
+  port: ${APP_PORT:8081}   # 注释
+  servlet:
+    context-path: "/api"
+spring:
+  application:
+    name: demo
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/demo?useSSL=false
+  data:
+    redis:
+      host: localhost
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+server:
+  port: 9000

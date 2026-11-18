@@ -1,0 +1,236 @@
+{
+  "id": "spring-boot",
+  "name": "%plugin.name%",
+  "version": "0.1.0",
+  "vendor": "Lemon Paperplane",
+  "description": "%plugin.description%",
+  "icon": "icons/spring-boot.svg",
+  "category": "framework",
+  "engines": {
+    "paperplane": ">=0.1.0 <0.2.0"
+  },
+  "protocol": 1,
+  "executable": "bin/paperplane-plugin-spring-boot",
+  "dependencies": [
+    {
+      "id": "java"
+    },
+    {
+      "id": "gradle",
+      "optional": true
+    },
+    {
+      "id": "maven",
+      "optional": true
+    },
+    {
+      "id": "kotlin",
+      "optional": true
+    }
+  ],
+  "activation": {
+    "facets": [
+      "gradle",
+      "maven"
+    ]
+  },
+  "contributes": {
+    "facets": [
+      {
+        "id": "spring-boot",
+        "name": "Spring Boot",
+        "icon": "icons/spring-boot.svg",
+        "category": "framework",
+        "priority": 80
+      }
+    ],
+    "runConfigurationTypes": [
+      {
+        "id": "spring-boot",
+        "name": "Spring Boot",
+        "icon": "icons/spring-boot.svg",
+        "facets": [
+          "spring-boot"
+        ],
+        "options": [
+          {
+            "key": "mainClass",
+            "title": "%opt.mainClass%",
+            "type": "string",
+            "required": true
+          },
+          {
+            "key": "module",
+            "title": "%opt.module%",
+            "type": "select",
+            "optionsFrom": "jvm.modules",
+            "info": "%opt.module.info%"
+          },
+          {
+            "key": "activeProfiles",
+            "title": "%opt.activeProfiles%",
+            "type": "multiselect",
+            "optionsFrom": "spring.profiles",
+            "info": "%opt.activeProfiles.info%"
+          },
+          {
+            "key": "port",
+            "title": "%opt.port%",
+            "type": "number",
+            "info": "%opt.port.info%"
+          },
+          {
+            "key": "vmOptions",
+            "title": "%opt.vmOptions%",
+            "type": "string",
+            "placeholder": "-Xmx1g"
+          },
+          {
+            "key": "programArgs",
+            "title": "%opt.programArgs%",
+            "type": "string"
+          },
+          {
+            "key": "launchMode",
+            "title": "%opt.launchMode%",
+            "type": "select",
+            "default": "direct",
+            "advanced": true,
+            "info": "%opt.launchMode.info%",
+            "options": [
+              {
+                "value": "direct",
+                "label": "%opt.launchMode.direct%"
+              },
+              {
+                "value": "buildTool",
+                "label": "%opt.launchMode.buildTool%"
+              }
+            ]
+          },
+          {
+            "key": "workingDir",
+            "title": "%opt.workingDir%",
+            "type": "path",
+            "advanced": true,
+            "info": "%opt.workingDir.info%"
+          }
+        ]
+      }
+    ],
+    "ideRunConfigTypes": [
+      "SpringBootApplicationConfigurationType"
+    ],
+    "urlPatterns": [
+      {
+        "hint": "started on port",
+        "pattern": "(?:Tomcat|Jetty|Undertow|Netty) started on port(?:\\(s\\))?:? (\\d+)(?: \\(http(?:/[\\d.]+)?\\)| \\(h2c\\))?(?: with context path '([^']*)'|\\s*$)",
+        "url": "http://localhost:{1}{2}"
+      },
+      {
+        "hint": "started on port",
+        "pattern": "(?:Tomcat|Jetty|Undertow|Netty) started on port(?:\\(s\\))?:? (\\d+) \\(https[^)]*\\)(?: with context path '([^']*)')?",
+        "url": "https://localhost:{1}{2}"
+      }
+    ],
+    "readyPatterns": [
+      {
+        "hint": "Started ",
+        "pattern": "Started \\S+ in \\d+(?:\\.\\d+)? seconds"
+      }
+    ],
+    "diagnostics": [
+      {
+        "id": "spring-boot.redis",
+        "hint": "Unable to connect to",
+        "pattern": "RedisConnectionException: Unable to connect to ([^\\s/:]+)(?:/[^:\\s]*)?:(\\d+)",
+        "severity": "error",
+        "title": "%diag.redis.title%",
+        "message": "%diag.redis.message%",
+        "stages": [
+          "run"
+        ]
+      },
+      {
+        "id": "spring-boot.kafka",
+        "hint": "could not be established",
+        "pattern": "Connection to node -?\\d+ \\(([^/\\s]+)/[^:\\s]*:(\\d+)\\) could not be established",
+        "severity": "warning",
+        "title": "%diag.kafka.title%",
+        "message": "%diag.kafka.message%",
+        "stages": [
+          "run"
+        ]
+      },
+      {
+        "id": "spring-boot.rabbitmq",
+        "hint": "AmqpConnectException",
+        "pattern": "AmqpConnectException",
+        "severity": "error",
+        "title": "%diag.rabbitmq.title%",
+        "message": "%diag.rabbitmq.message%",
+        "stages": [
+          "run"
+        ]
+      },
+      {
+        "id": "spring-boot.elasticsearch",
+        "hint": "node: http",
+        "pattern": "node: (https?://[^/,\\s]+)/?, status: .*(?:Connection refused|ConnectException)",
+        "severity": "error",
+        "title": "%diag.elasticsearch.title%",
+        "message": "%diag.elasticsearch.message%",
+        "stages": [
+          "run"
+        ]
+      },
+      {
+        "id": "spring-boot.mongodb",
+        "hint": "while connecting to server",
+        "pattern": "Exception in monitor thread while connecting to server ([\\w.\\-]+:\\d+)",
+        "severity": "error",
+        "title": "%diag.mongodb.title%",
+        "message": "%diag.mongodb.message%",
+        "stages": [
+          "run"
+        ]
+      },
+      {
+        "id": "spring-boot.livereload",
+        "hint": "LiveReload server",
+        "pattern": "Unable to start LiveReload server",
+        "severity": "info",
+        "title": "%diag.livereload.title%",
+        "message": "%diag.livereload.message%",
+        "stages": [
+          "run"
+        ]
+      }
+    ],
+    "views": [
+      {
+        "id": "app",
+        "title": "%view.title%",
+        "icon": "icons/spring-boot.svg",
+        "location": "run.panel",
+        "runState": "running",
+        "facets": [
+          "spring-boot"
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "name": "apps",
+        "title": "%tool.apps%",
+        "description": "List the Spring Boot applications detected in a module. For each application returns its name, main class, build subproject (Gradle path or Maven artifactId), available profiles, the profiles activated by default (spring.profiles.active in application.yml), the HTTP port and context path resolved for those profiles, the local URL, whether Spring Boot Actuator is present, and the middleware it connects to (databases, Redis, RabbitMQ, Kafka, Elasticsearch, MongoDB, Nacos) with the address configured in application*.yml/properties. Use it before starting an app or when diagnosing connection failures. Read only; does not start anything.",
+        "scope": "module",
+        "readOnly": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ]
+  }
+}
